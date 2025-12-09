@@ -1,0 +1,365 @@
+<!<!doctype html>
+
+<html lang="fr">
+<head>:<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Resell — Plateforme de revente moderne</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #fff; color: #1a1a1a; line-height: 1.6; }
+    .header { background: #fff; border-bottom: 1px solid #e5e5e5; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .header-content { max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .logo-section { display: flex; align-items: center; gap: 1rem; }
+    .logo { width: 48px; height: 48px; background: #1a1a1a; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .logo svg { width: 28px; height: 28px; }
+    .brand-info h1 { font-size: 1.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.125rem; }
+    .brand-info p { font-size: 0.875rem; color: #666; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .user-info { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #f5f5f5; border-radius: 8px; }
+    .user-avatar { width: 32px; height: 32px; background: #1a1a1a; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem; }
+    .subscription-badge { padding: 0.25rem 0.625rem; background: #ffd700; color: #1a1a1a; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .btn { padding: 0.625rem 1.25rem; border: none; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; }
+    .btn-secondary { background: #fff; color: #1a1a1a; border: 1px solid #e5e5e5; }
+    .btn-secondary:hover { background: #f5f5f5; border-color: #d5d5d5; }
+    .btn-primary { background: #1a1a1a; color: #fff; }
+    .btn-primary:hover { background: #333; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+    .btn-gold { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #1a1a1a; font-weight: 700; }
+    .btn-gold:hover { background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,215,0,0.4); }
+    .btn:active { transform: translateY(0); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; min-height: calc(100vh - 200px); }
+    .empty-state { text-align: center; padding: 4rem 2rem; }
+    .empty-icon { width: 120px; height: 120px; margin: 0 auto 2rem; background: #f5f5f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .empty-icon svg { width: 60px; height: 60px; color: #999; stroke: #999; }
+    .empty-state h2 { font-size: 1.75rem; margin-bottom: 1rem; color: #1a1a1a; font-weight: 700; }
+    .empty-state p { font-size: 1.125rem; color: #666; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .products-grid.hidden { display: none; }
+    .product-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden; transition: all 0.2s ease; cursor: pointer; }
+    .product-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.1); transform: translateY(-4px); border-color: #d5d5d5; }
+    .product-image { width: 100%; height: 220px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.875rem; overflow: hidden; position: relative; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { padding: 1.25rem; }
+    .product-info h3 { font-size: 1.125rem; margin-bottom: 0.5rem; color: #1a1a1a; font-weight: 600; }
+    .product-info p { font-size: 0.9375rem; color: #666; margin-bottom: 0.75rem; line-height: 1.5; }
+    .product-price { font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin-bottom: 1rem; }
+    .product-badge { display: inline-block; padding: 0.25rem 0.75rem; background: #f0f0f0; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #666; margin-bottom: 0.75rem; text-transform: uppercase; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; animation: fadeIn 0.2s ease; }
+    .modal.hidden { display: none; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-content { background: #fff; border-radius: 16px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 10; }
+    .modal-header h2 { font-size: 1.5rem; font-weight: 700; color: #1a1a1a; }
+    .close-btn { width: 32px; height: 32px; border: none; background: #f5f5f5; border-radius: 8px; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; color: #666; transition: all 0.2s ease; }
+    .close-btn:hover { background: #e5e5e5; color: #1a1a1a; }
+    .modal-body { padding: 1.5rem; }
+    .product-limit { text-align: center; color: #666; font-size: 0.875rem; margin-bottom: 1.5rem; padding: 0.75rem; background: #f5f5f5; border-radius: 8px; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1a1a1a; font-size: 0.9375rem; }
+    .form-group input, .form-group textarea, .form-select { width: 100%; padding: 0.75rem; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: all 0.2s ease; }
+    .form-group input:focus, .form-group textarea:focus, .form-select:focus { outline: none; border-color: #1a1a1a; box-shadow: 0 0 0 3px rgba(26,26,26,0.1); }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: #999; }
+    .upload-btn { width: 100%; padding: 1rem; border: 2px dashed #e5e5e5; border-radius: 8px; background: #fafafa; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #666; font-weight: 600; transition: all 0.2s ease; }
+    .upload-btn:hover { border-color: #1a1a1a; background: #f5f5f5; color: #1a1a1a; }
+    .image-preview { margin-top: 1rem; border-radius: 8px; overflow: hidden; border: 1px solid #e5e5e5; }
+    .image-preview img { width: 100%; height: auto; display: block; }
+    .image-preview.hidden { display: none; }
+    .modal-footer { padding: 1.5rem; border-top: 1px solid #e5e5e5; display: flex; gap: 1rem; position: sticky; bottom: 0; background: #fff; }
+    .modal-footer .btn { flex: 1; padding: 0.875rem; }
+    .detail-image { width: 100%; height: 300px; background: #f5f5f5; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .detail-image img { width: 100%; height: 100%; object-fit: cover; }
+    .detail-section { margin-bottom: 1.5rem; }
+    .detail-section h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: #1a1a1a; }
+    .detail-section p { color: #666; line-height: 1.6; }
+    .detail-price { font-size: 1.75rem; font-weight: 700; color: #1a1a1a; margin: 1rem 0; }
+    .detail-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem; }
+    .detail-info-item { padding: 0.75rem; background: #f5f5f5; border-radius: 8px; }
+    .detail-info-item strong { display: block; font-size: 0.8125rem; color: #666; margin-bottom: 0.25rem; text-transform: uppercase; font-weight: 600; }
+    .detail-info-item span { font-size: 1rem; color: #1a1a1a; }
+    .auth-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #e5e5e5; }
+    .auth-tab { padding: 0.75rem 1.5rem; background: none; border: none; font-size: 1rem; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.2s; }
+    .auth-tab.active { color: #1a1a1a; }
+    .auth-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: #1a1a1a; }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .subscription-card { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+    .subscription-card h3 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #1a1a1a; }
+    .subscription-card .price { font-size: 3rem; font-weight: 900; color: #1a1a1a; margin: 1rem 0; }
+    .subscription-card .price span { font-size: 1.5rem; }
+    .subscription-card ul { list-style: none; text-align: left; max-width: 400px; margin: 1.5rem auto; }
+    .subscription-card li { padding: 0.5rem 0; color: #1a1a1a; font-weight: 500; display: flex; align-items: center; gap: 0.5rem; }
+    .subscription-card li::before { content: '✓'; font-weight: 900; color: #1a1a1a; }
+    .form-link { text-align: center; margin-top: 1rem; color: #666; font-size: 0.9375rem; }
+    .form-link a { color: #1a1a1a; font-weight: 600; text-decoration: none; }
+    .form-link a:hover { text-decoration: underline; }
+    .site-footer { background: #f5f5f5; padding: 2rem 1.5rem; text-align: center; border-top: 1px solid #e5e5e5; margin-top: 4rem; }
+    .site-footer p { color: #666; font-size: 0.875rem; }
+    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; gap: 1rem; padding: 1rem; }
+      .brand-info p { display: none; }
+      .header-actions { width: 100%; flex-wrap: wrap; }
+      .header-actions .btn { flex: 1; }
+      .user-info { width: 100%; justify-content: center; }
+      .container { padding: 2rem 1rem; }
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+      .modal-content { margin: 0; border-radius: 16px 16px 0 0; max-height: 95vh; }
+      .empty-state { padding: 2rem 1rem; }
+      .detail-info-grid { grid-template-columns: 1fr; }
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>Resell</h1>
+          <p>Plateforme de revente moderne</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div id="userInfo" class="user-info hidden">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <span id="userName">Utilisateur</span>
+          <span id="subBadge" class="subscription-badge hidden">Premium</span>
+        </div>
+        <button class="btn btn-secondary hidden" id="addProductBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Ajouter
+        </button>
+        <button class="btn btn-gold hidden" id="subscribeBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          S'abonner
+        </button>
+        <button class="btn btn-secondary hidden" id="logoutBtn">Déconnexion</button>
+        <button class="btn btn-primary" id="loginBtn">Connexion</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 16V8C20.9996 7.64927 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64927 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>Aucun produit pour le moment</h2>
+      <p>Commencez à vendre en ajoutant votre premier produit. C'est rapide et facile !</p>
+      <button class="btn btn-primary" id="addFirstProductBtn">Ajouter votre premier produit</button>
+    </div>
+    <div id="productsGrid" class="products-grid hidden"></div>
+  </main>
+
+  <!-- Auth Modal -->
+
+  <div id="authModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Bienvenue sur Resell</h2>
+        <button class="close-btn" id="closeAuthBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="signin">Connexion</button>
+          <button class="auth-tab" data-tab="signup">Inscription</button>
+        </div>
+
+```
+    <!-- Sign In Form -->
+    <form id="signinForm" class="auth-form active">
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="signinEmail" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe *</label>
+        <input type="password" id="signinPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Se connecter</button>
+      <div class="form-link">
+        Pas encore de compte ? <a href="#" id="switchToSignup">S'inscrire</a>
+      </div>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form id="signupForm" class="auth-form">
+      <div class="form-group">
+        <label>Nom complet *</label>
+        <input type="text" id="signupName" placeholder="Jean Dupont" required>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="signupEmail" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Téléphone *</label>
+        <input type="tel" id="signupPhone" placeholder="+225 07 00 00 00 00" required>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe *</label>
+        <input type="password" id="signupPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Créer mon compte</button>
+      <div class="form-link">
+        Déjà inscrit ? <a href="#" id="switchToSignin">Se connecter</a>
+      </div>
+    </form>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- Subscription Modal -->
+
+  <div id="subscriptionModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Abonnement Premium</h2>
+        <button class="close-btn" id="closeSubBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="subscription-card">
+          <h3>✨ Premium</h3>
+          <div class="price">1000 <span>FCFA</span></div>
+          <p style="margin-bottom:1.5rem; color:#1a1a1a; font-weight:500;">Abonnement mensuel</p>
+          <ul>
+            <li>Produits illimités</li>
+            <li>Support prioritaire</li>
+            <li>Badge Premium</li>
+            <li>Statistiques avancées</li>
+            <li>Mise en avant des annonces</li>
+          </ul>
+        </div>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label>Méthode de paiement</label>
+            <select class="form-select" id="paymentMethod" required>
+              <option value="">Sélectionner...</option>
+              <option value="orange">Orange Money</option>
+              <option value="mtn">MTN Mobile Money</option>
+              <option value="moov">Moov Money</option>
+              <option value="wave">Wave</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Numéro de téléphone *</label>
+            <input type="tel" id="paymentPhone" placeholder="+225 07 00 00 00 00" required>
+          </div>
+          <button type="submit" class="btn btn-gold" style="width:100%;">Payer 1000 FCFA</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product Modal -->
+
+  <div id="addProductModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Ajouter un nouveau produit</h2>
+        <button class="close-btn" id="closeModalBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="product-limit">Remplissez les détails pour publier votre produit. (<span id="productCount">0</span>/<span id="productLimit">5</span> produits utilisés)</div>
+        <form id="productForm">
+          <div class="form-group">
+            <label>Nom du produit *</label>
+            <input type="text" id="productName" placeholder="ex: iPhone 13 Pro" required>
+          </div>
+          <div class="form-group">
+            <label>Description *</label>
+            <textarea id="productDesc" placeholder="Décrivez votre produit..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Prix (FCFA) *</label>
+            <input type="number" id="productPrice" placeholder="ex: 250000" required>
+          </div>
+          <div class="form-group">
+            <label>Numéro de téléphone *</label>
+            <input type="tel" id="productPhone" placeholder="+225 07 00 00 00 00" required>
+          </div>
+          <div class="form-group">
+            <label>Ville *</label>
+            <input type="text" id="productCity" placeholder="ex: Abidjan" required>
+          </div>
+          <div class="form-group">
+            <label>Catégorie *</label>
+            <select id="productCategory" class="form-select" required>
+              <option value="electronics">Électronique</option>
+              <option value="fashion">Mode</option>
+              <option value="home">Maison</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Image du produit</label>
+            <input type="file" id="productImage" accept="image/*" style="display:none">
+            <button type="button" class="upload-btn" id="uploadBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span id="uploadText">Télécharger une image</span>
+            </button>
+            <div id="imagePreview" class="image-preview hidden"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelBtn">Annuler</button>
+        <button class="btn btn-primary" id="submitProductBtn">Ajouter le produit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+
+  <div id="productDetailModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Détails du produit</h2>
+        <button class="close-btn" id="closeDetailBtn">✕</button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="closeDetailFooterBtn">Fermer</button>
+        <button class="btn btn-primary" id="contactSellerBtn">Contacter le vendeur</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>© 2024 Resell — Plateforme de revente moderne</p>
+  </footer>
+
+  <script>
+  <script src="app.js"></script>
+</body>
+</htlm>
+    let currentUser = null;
+    let products = [];
+    let selectedImage = null;
+
+    const els = {
+      authModal: document.getElementById('authModal'),
+      subscriptionModal: document.getElementById('subscriptionModal'),
+      addProductModal: document.getElementById('addProductModal'),
+      productDetailModal: document.getElementById('productDetailModal'),
+      loginBtn: document.getElementById('loginBtn'),
+      logoutBtn: document.getElementById('logoutBtn'),
+      addProductBtn: document.getElementById('addProductBtn'),
+      addFirstProduct
